@@ -28,7 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
     CardView cvAdd;
     private final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-    private EditText editTextUsername, editTextPassword, editTextRepeatPassword;
+    private EditText editTextUsername, editTextPassword, editTextRepeatPassword, editTextEmail;
     public static String STR_EXTRA_ACTION_REGISTER = "register";
 
     @Override
@@ -40,6 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
         editTextUsername = findViewById(R.id.et_username);
         editTextPassword = findViewById(R.id.et_password);
         editTextRepeatPassword = findViewById(R.id.et_repeatpassword);
+        editTextEmail = findViewById(R.id.et_email);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ShowEnterAnimation();
         }
@@ -131,12 +132,14 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void clickRegister(View view) {
+        String email = editTextEmail.getText().toString();
         String username = editTextUsername.getText().toString();
         String password = editTextPassword.getText().toString();
         String repeatPassword = editTextRepeatPassword.getText().toString();
-        boolean isValid = validate(username, password, repeatPassword);
+        boolean isValid = validate(email, password, repeatPassword);
         if(isValid){
             Intent data = new Intent();
+            data.putExtra(Config.STR_EXTRA_EMAIL, email);
             data.putExtra(Config.STR_EXTRA_USERNAME, username);
             data.putExtra(Config.STR_EXTRA_PASSWORD, password);
             data.putExtra(Config.STR_EXTRA_ACTION, STR_EXTRA_ACTION_REGISTER);

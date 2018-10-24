@@ -62,15 +62,15 @@ public class AddGroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_group);
 
         Intent intentData = getIntent();
-        txtActionName = (TextView) findViewById(R.id.txtActionName);
+        txtActionName = findViewById(R.id.txtActionName);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         listFriend = FriendDB.getInstance(this).getListFriend();
         listIDChoose = new HashSet<>();
         listIDRemove = new HashSet<>();
         listIDChoose.add(Config.UID);
-        btnAddGroup = (LinearLayout) findViewById(R.id.btnAddGroup);
-        editTextGroupName = (EditText) findViewById(R.id.editGroupName);
-        txtGroupIcon = (TextView) findViewById(R.id.icon_group);
+        btnAddGroup = findViewById(R.id.btnAddGroup);
+        editTextGroupName = findViewById(R.id.editGroupName);
+        txtGroupIcon = findViewById(R.id.icon_group);
         dialogWait = new LovelyProgressDialog(this).setCancelable(false);
         editTextGroupName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -123,7 +123,7 @@ public class AddGroupActivity extends AppCompatActivity {
             isEditGroup = false;
         }
 
-        recyclerListFriend = (RecyclerView) findViewById(R.id.recycleListFriend);
+        recyclerListFriend = findViewById(R.id.recycleListFriend);
         recyclerListFriend.setLayoutManager(linearLayoutManager);
         adapter = new ListPeopleAdapter(this, listFriend, btnAddGroup, listIDChoose, listIDRemove, isEditGroup, groupEdit);
         recyclerListFriend.setAdapter(adapter);
@@ -320,13 +320,13 @@ class ListPeopleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ((ItemFriendHolder) holder).txtName.setText(listFriend.getListFriend().get(position).name);
         ((ItemFriendHolder) holder).txtEmail.setText(listFriend.getListFriend().get(position).email);
-        String avata = listFriend.getListFriend().get(position).avata;
+        String avatar = listFriend.getListFriend().get(position).avatar;
         final String id = listFriend.getListFriend().get(position).id;
-        if (!avata.equals(Config.STR_DEFAULT_BASE64)) {
-            byte[] decodedString = Base64.decode(avata, Base64.DEFAULT);
-            ((ItemFriendHolder) holder).avata.setImageBitmap(BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
+        if (!avatar.equals(Config.STR_DEFAULT_BASE64)) {
+            byte[] decodedString = Base64.decode(avatar, Base64.DEFAULT);
+            ((ItemFriendHolder) holder).avatar.setImageBitmap(BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
         }else{
-            ((ItemFriendHolder) holder).avata.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_default_avatar));
+            ((ItemFriendHolder) holder).avatar.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_default_avatar));
         }
         ((ItemFriendHolder) holder).checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -360,14 +360,14 @@ class ListPeopleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 class ItemFriendHolder extends RecyclerView.ViewHolder {
     public TextView txtName, txtEmail;
-    public CircleImageView avata;
+    public CircleImageView avatar;
     public CheckBox checkBox;
 
     public ItemFriendHolder(View itemView) {
         super(itemView);
         txtName = (TextView) itemView.findViewById(R.id.txtName);
         txtEmail = (TextView) itemView.findViewById(R.id.txtEmail);
-        avata = (CircleImageView) itemView.findViewById(R.id.icon_avata);
+        avatar = (CircleImageView) itemView.findViewById(R.id.icon_avata);
         checkBox = (CheckBox) itemView.findViewById(R.id.checkAddPeople);
     }
 }

@@ -251,7 +251,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                             Friend user = new Friend();
                             user.name = (String) userMap.get("name");
                             user.email = (String) userMap.get("email");
-                            user.avata = (String) userMap.get("avata");
+                            user.avatar = (String) userMap.get("avatar");
                             user.id = id;
                             user.idRoom = id.compareTo(Config.UID) > 0 ? (Config.UID + id).hashCode() + "" : "" + (id + Config.UID).hashCode();
                             checkBeforAddFriend(id, user);
@@ -406,7 +406,7 @@ public class FriendFragment extends Fragment implements SwipeRefreshLayout.OnRef
                         HashMap mapUserInfo = (HashMap) dataSnapshot.getValue();
                         user.name = (String) mapUserInfo.get("name");
                         user.email = (String) mapUserInfo.get("email");
-                        user.avata = (String) mapUserInfo.get("avata");
+                        user.avatar = (String) mapUserInfo.get("avatar");
                         user.id = id;
                         user.idRoom = id.compareTo(Config.UID) > 0 ? (Config.UID + id).hashCode() + "" : "" + (id + Config.UID).hashCode();
                         dataListFriend.getListFriend().add(user);
@@ -459,7 +459,7 @@ class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         final String name = listFriend.getListFriend().get(position).name;
         final String id = listFriend.getListFriend().get(position).id;
         final String idRoom = listFriend.getListFriend().get(position).idRoom;
-        final String avata = listFriend.getListFriend().get(position).avata;
+        final String avatar = listFriend.getListFriend().get(position).avatar;
         ((ItemFriendViewHolder) holder).txtName.setText(name);
 
         ((View) ((ItemFriendViewHolder) holder).txtName.getParent().getParent().getParent())
@@ -474,12 +474,12 @@ class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         idFriend.add(id);
                         intent.putCharSequenceArrayListExtra(Config.INTENT_KEY_CHAT_ID, idFriend);
                         intent.putExtra(Config.INTENT_KEY_CHAT_ROOM_ID, idRoom);
-                        ChatActivity.bitmapAvataFriend = new HashMap<>();
-                        if (!avata.equals(Config.STR_DEFAULT_BASE64)) {
-                            byte[] decodedString = Base64.decode(avata, Base64.DEFAULT);
-                            ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
+                        ChatActivity.bitmapAvatarFriend = new HashMap<>();
+                        if (!avatar.equals(Config.STR_DEFAULT_BASE64)) {
+                            byte[] decodedString = Base64.decode(avatar, Base64.DEFAULT);
+                            ChatActivity.bitmapAvatarFriend.put(id, BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
                         } else {
-                            ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_default_avatar));
+                            ChatActivity.bitmapAvatarFriend.put(id, BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_default_avatar));
                         }
 
                         mapMark.put(id, null);
@@ -592,12 +592,12 @@ class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 mapMark.put(id, true);
             }
         }
-        if (listFriend.getListFriend().get(position).avata.equals(Config.STR_DEFAULT_BASE64)) {
-            ((ItemFriendViewHolder) holder).avata.setImageResource(R.drawable.ic_default_avatar);
+        if (listFriend.getListFriend().get(position).avatar.equals(Config.STR_DEFAULT_BASE64)) {
+            ((ItemFriendViewHolder) holder).avatar.setImageResource(R.drawable.ic_default_avatar);
         } else {
-            byte[] decodedString = Base64.decode(listFriend.getListFriend().get(position).avata, Base64.DEFAULT);
+            byte[] decodedString = Base64.decode(listFriend.getListFriend().get(position).avatar, Base64.DEFAULT);
             Bitmap src = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            ((ItemFriendViewHolder) holder).avata.setImageBitmap(src);
+            ((ItemFriendViewHolder) holder).avatar.setImageBitmap(src);
         }
 
 
@@ -641,9 +641,9 @@ class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         if (listFriend.getListFriend().get(position).status.isOnline) {
-            ((ItemFriendViewHolder) holder).avata.setBorderWidth(10);
+            ((ItemFriendViewHolder) holder).avatar.setBorderWidth(10);
         } else {
-            ((ItemFriendViewHolder) holder).avata.setBorderWidth(0);
+            ((ItemFriendViewHolder) holder).avatar.setBorderWidth(0);
         }
     }
 
@@ -723,13 +723,13 @@ class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 }
 
 class ItemFriendViewHolder extends RecyclerView.ViewHolder{
-    public CircleImageView avata;
+    public CircleImageView avatar;
     public TextView txtName, txtTime, txtMessage;
     private Context context;
 
     ItemFriendViewHolder(Context context, View itemView) {
         super(itemView);
-        avata = (CircleImageView) itemView.findViewById(R.id.icon_avata);
+        avatar = (CircleImageView) itemView.findViewById(R.id.icon_avata);
         txtName = (TextView) itemView.findViewById(R.id.txtName);
         txtTime = (TextView) itemView.findViewById(R.id.txtTime);
         txtMessage = (TextView) itemView.findViewById(R.id.txtMessage);

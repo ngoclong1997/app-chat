@@ -61,10 +61,10 @@ public class UserProfileFragment extends Fragment {
     private RecyclerView recyclerView;
     private UserInfoAdapter infoAdapter;
 
-    private static final String USERNAME_LABEL = "Username";
+    private static final String USERNAME_LABEL = "Biệt danh";
     private static final String EMAIL_LABEL = "Email";
-    private static final String SIGNOUT_LABEL = "Sign out";
-    private static final String RESETPASS_LABEL = "Change Password";
+    private static final String SIGNOUT_LABEL = "Đăng xuất";
+    private static final String RESETPASS_LABEL = "Đặt lại mật khẩu";
 
     private static final int PICK_IMAGE = 1994;
     private LovelyProgressDialog waitingDialog;
@@ -99,7 +99,7 @@ public class UserProfileFragment extends Fragment {
                 tvUserName.setText(myAccount.name);
             }
 
-            setImageAvatar(context, myAccount.avata);
+            setImageAvatar(context, myAccount.avatar);
             SharedPreferenceHelper preferenceHelper = SharedPreferenceHelper.getInstance(context);
             preferenceHelper.saveUserInfo(myAccount);
         }
@@ -128,7 +128,7 @@ public class UserProfileFragment extends Fragment {
         SharedPreferenceHelper prefHelper = SharedPreferenceHelper.getInstance(context);
         myAccount = prefHelper.getUserInfo();
         setupArrayListInfo(myAccount);
-        setImageAvatar(context, myAccount.avata);
+        setImageAvatar(context, myAccount.avatar);
         tvUserName.setText(myAccount.name);
 
         recyclerView = view.findViewById(R.id.info_recycler_view);
@@ -150,8 +150,8 @@ public class UserProfileFragment extends Fragment {
         public void onClick(View view) {
 
             new AlertDialog.Builder(context)
-                    .setTitle("Avatar")
-                    .setMessage("Are you sure want to change avatar profile?")
+                    .setTitle("Đổi ảnh đại diện")
+                    .setMessage("Bạn có muốn cập nhật ảnh đại diện?")
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -190,14 +190,14 @@ public class UserProfileFragment extends Fragment {
                         ImageUtils.AVATAR_WIDTH, ImageUtils.AVATAR_HEIGHT);
 
                 String imageBase64 = ImageUtils.encodeBase64(liteImage);
-                myAccount.avata = imageBase64;
+                myAccount.avatar = imageBase64;
 
                 waitingDialog.setCancelable(false)
-                        .setTitle("Avatar updating....")
+                        .setTitle("Cập nhật ảnh đại diện....")
                         .setTopColorRes(R.color.colorPrimary)
                         .show();
 
-                userDB.child("avata").setValue(imageBase64)
+                userDB.child("avatar").setValue(imageBase64)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -210,8 +210,8 @@ public class UserProfileFragment extends Fragment {
 
                                     new LovelyInfoDialog(context)
                                             .setTopColorRes(R.color.colorPrimary)
-                                            .setTitle("Success")
-                                            .setMessage("Update avatar successfully!")
+                                            .setTitle("Thành công")
+                                            .setMessage("Cập nhật ảnh đại diện thành công!")
                                             .show();
                                 }
                             }
@@ -223,8 +223,8 @@ public class UserProfileFragment extends Fragment {
                                 Log.d("Update Avatar", "failed");
                                 new LovelyInfoDialog(context)
                                         .setTopColorRes(R.color.colorAccent)
-                                        .setTitle("False")
-                                        .setMessage("False to update avatar")
+                                        .setTitle("Failed")
+                                        .setMessage("Update avatar failed")
                                         .show();
                             }
                         });
@@ -246,10 +246,10 @@ public class UserProfileFragment extends Fragment {
         Configuration emailConfig = new Configuration(EMAIL_LABEL, myAccount.email, R.mipmap.ic_email);
         listConfig.add(emailConfig);
 
-        Configuration resetPass = new Configuration(RESETPASS_LABEL, "", R.mipmap.ic_restore);
+        Configuration resetPass = new Configuration(RESETPASS_LABEL, "Đặt lại mật khẩu cho tài khoản của bạn", R.mipmap.ic_restore);
         listConfig.add(resetPass);
 
-        Configuration signout = new Configuration(SIGNOUT_LABEL, "", R.mipmap.ic_power_settings);
+        Configuration signout = new Configuration(SIGNOUT_LABEL, "Đăng xuất tài khoản", R.mipmap.ic_power_settings);
         listConfig.add(signout);
     }
 
@@ -304,11 +304,26 @@ public class UserProfileFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     if(config.getLabel().equals(SIGNOUT_LABEL)){
-                        FirebaseAuth.getInstance().signOut();
-                        FriendDB.getInstance(getContext()).dropDB();
-                        GroupDB.getInstance(getContext()).dropDB();
-                        ChatServices.stopServiceFriendChat(getContext().getApplicationContext(), true);
-                        getActivity().finish();
+                        new AlertDialog.Builder(context)
+                                .setTitle(R.string.logout)
+                                .setMessage("Bạn có muốn đăng xuất ?")
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        FirebaseAuth.getInstance().signOut();
+                                        FriendDB.getInstance(getContext()).dropDB();
+                                        GroupDB.getInstance(getContext()).dropDB();
+                                        ChatServices.stopServiceFriendChat(getContext().getApplicationContext(), true);
+                                        getActivity().finish();
+                                        dialogInterface.dismiss();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                }).show();
                     }
 
                     if(config.getLabel().equals(USERNAME_LABEL)){
@@ -318,9 +333,9 @@ public class UserProfileFragment extends Fragment {
                         input.setText(myAccount.name);
                         /*Hiển thị dialog với dEitText cho phép người dùng nhập username mới*/
                         new AlertDialog.Builder(context)
-                                .setTitle("Edit username")
+                                .setTitle("Cập nhật biệt danh")
                                 .setView(vewInflater)
-                                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                                .setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         String newName = input.getText().toString();
@@ -330,7 +345,7 @@ public class UserProfileFragment extends Fragment {
                                         dialogInterface.dismiss();
                                     }
                                 })
-                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         dialogInterface.dismiss();
@@ -340,8 +355,8 @@ public class UserProfileFragment extends Fragment {
 
                     if(config.getLabel().equals(RESETPASS_LABEL)){
                         new AlertDialog.Builder(context)
-                                .setTitle("Password")
-                                .setMessage("Are you sure want to reset password?")
+                                .setTitle("Reset mật khẩu")
+                                .setMessage("Bạn có muốn đổi mật khẩu không?")
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -394,8 +409,8 @@ public class UserProfileFragment extends Fragment {
                             }
                                     .setTopColorRes(R.color.colorPrimary)
                                     .setIcon(R.drawable.ic_reset_password)
-                                    .setTitle("Password Recovery")
-                                    .setMessage("Sent email to " + email)
+                                    .setTitle("Đặt lại mật khẩu")
+                                    .setMessage("Mật khẩu đã được gửi qua email " + email)
                                     .setConfirmButtonText("Ok")
                                     .show();
                         }
@@ -417,8 +432,8 @@ public class UserProfileFragment extends Fragment {
                             }
                                     .setTopColorRes(R.color.colorAccent)
                                     .setIcon(R.drawable.ic_reset_password)
-                                    .setTitle("False")
-                                    .setMessage("False to sent email to " + email)
+                                    .setTitle("Đặt lại mật khẩu bị lỗi")
+                                    .setMessage("Có lỗi xảy ra khi reset mật khẩu. Vui lòng thử lại sau")
                                     .setConfirmButtonText("Ok")
                                     .show();
                         }

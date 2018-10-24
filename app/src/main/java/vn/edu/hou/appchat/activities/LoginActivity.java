@@ -123,9 +123,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Config.REQUEST_CODE_REGISTER && resultCode == RESULT_OK) {
+            String email = data.getStringExtra(Config.STR_EXTRA_EMAIL);
             String username = data.getStringExtra(Config.STR_EXTRA_USERNAME);
             String password = data.getStringExtra(Config.STR_EXTRA_PASSWORD);
-            authUtils.createUser(username, password);
+
+            authUtils.createUser(email, password, username);
         }
     }
 
@@ -167,10 +169,9 @@ public class LoginActivity extends AppCompatActivity {
          * @param email
          * @param password
          */
-        void createUser(String email, final String password) {
-            Log.d(TAG, "email " + email + "password " + password);
+        void createUser(String email, final String password, final String username) {
             waitingDialog.setIcon(R.drawable.ic_add_friend)
-                    .setTitle("Registering....")
+                    .setTitle("Đang đăng ký....")
                     .setTopColorRes(R.color.colorPrimary)
                     .show();
             mAuth.createUserWithEmailAndPassword(email, password)
@@ -200,14 +201,14 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                                         .setTopColorRes(R.color.colorAccent)
                                         .setIcon(R.drawable.ic_add_friend)
-                                        .setTitle("Register false")
-                                        .setMessage("Email exist or weak password!")
-                                        .setConfirmButtonText("ok")
+                                        .setTitle("Đăng ký không thành công")
+                                        .setMessage("Email đã tồn tại hoặc mật khẩu chưa đủ mạnh!")
+                                        .setConfirmButtonText("OK")
                                         .setCancelable(false)
                                         .show();
                             } else {
-                                initNewUserInfo();
-                                Toast.makeText(LoginActivity.this, "Register and Login success", Toast.LENGTH_SHORT).show();
+                                initNewUserInfo(username);
+                                Toast.makeText(LoginActivity.this, "Đã đăng ký và đăng nhập thành công", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 LoginActivity.this.finish();
                             }
@@ -231,7 +232,7 @@ public class LoginActivity extends AppCompatActivity {
          */
         void signIn(String email, String password) {
             waitingDialog.setIcon(R.drawable.ic_user)
-                    .setTitle("Login....")
+                    .setTitle("Đăng nhập....")
                     .setTopColorRes(R.color.colorPrimary)
                     .show();
             mAuth.signInWithEmailAndPassword(email, password)
@@ -259,8 +260,8 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                                         .setTopColorRes(R.color.colorAccent)
                                         .setIcon(R.drawable.ic_user)
-                                        .setTitle("Login false")
-                                        .setMessage("Email not exist or wrong password!")
+                                        .setTitle("Đăng nhập không thành công")
+                                        .setMessage("Tài khoản hoặc mật khẩu không chính xác!")
                                         .setCancelable(false)
                                         .setConfirmButtonText("Ok")
                                         .show();
@@ -346,7 +347,7 @@ public class LoginActivity extends AppCompatActivity {
                     User userInfo = new User();
                     userInfo.name = (String) hashUser.get("name");
                     userInfo.email = (String) hashUser.get("email");
-                    userInfo.avata = (String) hashUser.get("avata");
+                    userInfo.avatar = (String) hashUser.get("avatar");
                     SharedPreferenceHelper.getInstance(LoginActivity.this).saveUserInfo(userInfo);
                 }
 
@@ -360,11 +361,11 @@ public class LoginActivity extends AppCompatActivity {
         /**
          * Khoi tao thong tin mac dinh cho tai khoan moi
          */
-        void initNewUserInfo() {
+        void initNewUserInfo(String username) {
             User newUser = new User();
             newUser.email = user.getEmail();
-            newUser.name = user.getEmail().substring(0, user.getEmail().indexOf("@"));
-            newUser.avata = Config.STR_DEFAULT_BASE64;
+            newUser.name = username;
+            newUser.avatar = Config.STR_DEFAULT_BASE64;
             FirebaseDatabase.getInstance().getReference().child("user/" + user.getUid()).setValue(newUser);
         }
     }

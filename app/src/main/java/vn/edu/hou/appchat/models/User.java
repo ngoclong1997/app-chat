@@ -5,7 +5,7 @@ package vn.edu.hou.appchat.models;
 public class User {
     public String name;
     public String email;
-    public String avata;
+    public String avatar;
     public UserStatus status;
     public Message message;
 

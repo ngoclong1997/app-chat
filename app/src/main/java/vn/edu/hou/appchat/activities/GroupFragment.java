@@ -402,17 +402,17 @@ class ListGroupsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra(Config.INTENT_KEY_CHAT_FRIEND, groupName);
                 ArrayList<CharSequence> idFriend = new ArrayList<>();
-                ChatActivity.bitmapAvataFriend = new HashMap<>();
+                ChatActivity.bitmapAvatarFriend = new HashMap<>();
                 for(String id : listGroup.get(position).member) {
                     idFriend.add(id);
-                    String avata = listFriend.getAvataById(id);
-                    if(!avata.equals(Config.STR_DEFAULT_BASE64)) {
-                        byte[] decodedString = Base64.decode(avata, Base64.DEFAULT);
-                        ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
-                    }else if(avata.equals(Config.STR_DEFAULT_BASE64)) {
-                        ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_default_avatar));
+                    String avatar = listFriend.getAvatarById(id);
+                    if(!avatar.equals(Config.STR_DEFAULT_BASE64)) {
+                        byte[] decodedString = Base64.decode(avatar, Base64.DEFAULT);
+                        ChatActivity.bitmapAvatarFriend.put(id, BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
+                    }else if(avatar.equals(Config.STR_DEFAULT_BASE64)) {
+                        ChatActivity.bitmapAvatarFriend.put(id, BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_default_avatar));
                     }else {
-                        ChatActivity.bitmapAvataFriend.put(id, null);
+                        ChatActivity.bitmapAvatarFriend.put(id, null);
                     }
                 }
                 intent.putCharSequenceArrayListExtra(Config.INTENT_KEY_CHAT_ID, idFriend);
