@@ -59,7 +59,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         String nameFriend = intentData.getStringExtra(Config.INTENT_KEY_CHAT_FRIEND);
 
         conversation = new Conversation();
-        btnSend = (ImageButton) findViewById(R.id.btnSend);
+        btnSend = findViewById(R.id.btnSend);
         btnSend.setOnClickListener(this);
 
         String base64AvatarUser = SharedPreferenceHelper.getInstance(this).getUserInfo().avatar;
@@ -70,11 +70,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             bitmapAvatarUser = null;
         }
 
-        editWriteMessage = (EditText) findViewById(R.id.editWriteMessage);
+        editWriteMessage = findViewById(R.id.editWriteMessage);
         if (idFriend != null && nameFriend != null) {
             getSupportActionBar().setTitle(nameFriend);
             linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-            recyclerChat = (RecyclerView) findViewById(R.id.recyclerChat);
+            recyclerChat = findViewById(R.id.recyclerChat);
             recyclerChat.setLayoutManager(linearLayoutManager);
             adapter = new ListMessageAdapter(this, conversation, bitmapAvatarFriend, bitmapAvatarUser);
             FirebaseDatabase.getInstance().getReference().child("message/" + roomId).addChildEventListener(new ChildEventListener() {
@@ -239,8 +239,15 @@ class ItemMessageUserHolder extends RecyclerView.ViewHolder {
 
     public ItemMessageUserHolder(View itemView) {
         super(itemView);
-        txtContent = (TextView) itemView.findViewById(R.id.textContentUser);
-        avatar = (CircleImageView) itemView.findViewById(R.id.imageView2);
+        txtContent = itemView.findViewById(R.id.textContentUser);
+        avatar = itemView.findViewById(R.id.imageView2);
+    }
+}
+
+class ItemImageHolder extends  RecyclerView.ViewHolder {
+
+    public ItemImageHolder(View itemView) {
+        super(itemView);
     }
 }
 

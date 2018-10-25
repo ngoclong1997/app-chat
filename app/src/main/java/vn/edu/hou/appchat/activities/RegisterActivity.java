@@ -146,7 +146,7 @@ public class RegisterActivity extends AppCompatActivity {
             setResult(RESULT_OK, data);
             finish();
         }else {
-            Toast.makeText(this, "Invalid email or not match password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Email sai định dạng hoặc mật khẩu không trùng khớp.", Toast.LENGTH_SHORT).show();
         }
     }
 

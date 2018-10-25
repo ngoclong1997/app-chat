@@ -28,7 +28,6 @@ public final class FriendDB {
         return instance;
     }
 
-
     public long addFriend(Friend friend) {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         // Create a new map of values, where column names are the keys

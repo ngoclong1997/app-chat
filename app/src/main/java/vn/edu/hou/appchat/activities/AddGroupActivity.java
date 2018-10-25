@@ -97,10 +97,10 @@ public class AddGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (listIDChoose.size() < 3) {
-                    Toast.makeText(AddGroupActivity.this, "Add at lease two people to create group", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddGroupActivity.this, "Cần ít nhất 2 người để tạo nhóm", Toast.LENGTH_SHORT).show();
                 } else {
                     if (editTextGroupName.getText().length() == 0) {
-                        Toast.makeText(AddGroupActivity.this, "Enter group name", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddGroupActivity.this, "Nhập tên nhóm", Toast.LENGTH_SHORT).show();
                     } else {
                         if (isEditGroup) {
                             editGroup();
@@ -134,7 +134,7 @@ public class AddGroupActivity extends AppCompatActivity {
     private void editGroup() {
         //Show dialog wait
         dialogWait.setIcon(R.drawable.ic_float_add_group)
-                .setTitle("Editing....")
+                .setTitle("Đang chỉnh sửa....")
                 .setTopColorRes(R.color.colorPrimary)
                 .show();
         //Delete group
@@ -170,8 +170,8 @@ public class AddGroupActivity extends AppCompatActivity {
                         }
                                 .setTopColorRes(R.color.colorAccent)
                                 .setIcon(R.drawable.ic_float_add_group)
-                                .setTitle("False")
-                                .setMessage("Cannot connect database")
+                                .setTitle("Lỗi")
+                                .setMessage("Không kết nối được đến database")
                                 .setCancelable(false)
                                 .setConfirmButtonText("Ok")
                                 .show();
@@ -183,7 +183,7 @@ public class AddGroupActivity extends AppCompatActivity {
     private void createGroup() {
         //Show dialog wait
         dialogWait.setIcon(R.drawable.ic_float_add_group)
-                .setTitle("Registering....")
+                .setTitle("Đang tạo nhóm....")
                 .setTopColorRes(R.color.colorPrimary)
                 .show();
 
@@ -205,7 +205,7 @@ public class AddGroupActivity extends AppCompatActivity {
     private void deleteRoomForUser(final String roomId, final int userIndex) {
         if (userIndex == listIDRemove.size()) {
             dialogWait.dismiss();
-            Toast.makeText(this, "Edit group success", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Cập nhật thành công...", Toast.LENGTH_SHORT).show();
             setResult(RESULT_OK, null);
             AddGroupActivity.this.finish();
         } else {
@@ -234,8 +234,8 @@ public class AddGroupActivity extends AppCompatActivity {
                             }
                                     .setTopColorRes(R.color.colorAccent)
                                     .setIcon(R.drawable.ic_float_add_group)
-                                    .setTitle("False")
-                                    .setMessage("Cannot connect database")
+                                    .setTitle("Lỗi")
+                                    .setMessage("Không kết nối được database")
                                     .setCancelable(false)
                                     .setConfirmButtonText("Ok")
                                     .show();
@@ -248,7 +248,7 @@ public class AddGroupActivity extends AppCompatActivity {
         if (userIndex == listIDChoose.size()) {
             if (!isEditGroup) {
                 dialogWait.dismiss();
-                Toast.makeText(this, "Create group success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Tạo nhóm thành công", Toast.LENGTH_SHORT).show();
                 setResult(RESULT_OK, null);
                 AddGroupActivity.this.finish();
             } else {
@@ -278,8 +278,8 @@ public class AddGroupActivity extends AppCompatActivity {
                     }
                             .setTopColorRes(R.color.colorAccent)
                             .setIcon(R.drawable.ic_float_add_group)
-                            .setTitle("False")
-                            .setMessage("Create group false")
+                            .setTitle("Lỗi")
+                            .setMessage("Tạo group thất bại")
                             .setCancelable(false)
                             .setConfirmButtonText("Ok")
                             .show();
@@ -305,7 +305,6 @@ class ListPeopleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.btnAddGroup = btnAddGroup;
         this.listIDChoose = listIDChoose;
         this.listIDRemove = listIDRemove;
-
         this.isEdit = isEdit;
         this.editGroup = editGroup;
     }
@@ -365,10 +364,10 @@ class ItemFriendHolder extends RecyclerView.ViewHolder {
 
     public ItemFriendHolder(View itemView) {
         super(itemView);
-        txtName = (TextView) itemView.findViewById(R.id.txtName);
-        txtEmail = (TextView) itemView.findViewById(R.id.txtEmail);
-        avatar = (CircleImageView) itemView.findViewById(R.id.icon_avata);
-        checkBox = (CheckBox) itemView.findViewById(R.id.checkAddPeople);
+        txtName = itemView.findViewById(R.id.txtName);
+        txtEmail = itemView.findViewById(R.id.txtEmail);
+        avatar = itemView.findViewById(R.id.icon_avata);
+        checkBox = itemView.findViewById(R.id.checkAddPeople);
     }
 }
 

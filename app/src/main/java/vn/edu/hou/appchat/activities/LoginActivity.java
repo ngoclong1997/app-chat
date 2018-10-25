@@ -137,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
         if (validate(username, password)) {
             authUtils.signIn(username, password);
         } else {
-            Toast.makeText(this, "Invalid email or empty password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Email không đúng định dạng hoặc password bị bỏ trống", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -158,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
         if (validate(username, ";")) {
             authUtils.resetPassword(username);
         } else {
-            Toast.makeText(this, "Invalid email", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Email không đúng định dạng", Toast.LENGTH_SHORT).show();
         }
     }
 
